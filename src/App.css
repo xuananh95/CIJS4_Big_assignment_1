@@ -12,13 +12,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #0f0c45;
+  background-color: #635bff;
   flex-direction: column;
 }
 
 #section {
   width: 100%;
-  max-width: 450px;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
 }
 
 #section .add-form{
@@ -26,6 +28,7 @@
   padding: 50px;
   display: flex;
   justify-content: center;
+  align-items: center;
   background-color: violet;
   border-radius: 6px;
 }
@@ -42,3 +45,29 @@ form .button-group {
   display: block;
   margin-bottom: 3px;
 }
+
+#section .list-expense {  
+  margin-top: 20px;
+  min-width: 100%;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  border-radius: 6px;
+}
+
+.filter {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  font-size: 20px;
+}
+
+.filter select {
+  font-size: 15px;
+  padding: 5px;
+}
+
