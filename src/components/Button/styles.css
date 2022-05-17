@@ -1,0 +1,17 @@
+.button {
+    cursor: pointer;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+}
+
+.violet {
+    background-color: rgb(100, 15, 100);
+    color: white;
+}
+
+.gray {
+    color: gray;
+    background-color: rgb(178, 178, 178);
+    margin-left: 7px;
+}
