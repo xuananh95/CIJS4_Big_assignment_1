@@ -4,22 +4,41 @@ import Input from "./components/Input";
 import Expense from "./components/Expense";
 import { useState, useEffect } from "react";
 import { ImHome } from "react-icons/im";
+import { v4 as uuidv4 } from "uuid";
 
 const initialValue = {
+    id: "",
     name: "",
     amount: "",
     date: "",
 };
 
+const MONTHS = {
+    "01": 0,
+    "02": 0,
+    "03": 0,
+    "04": 0,
+    "05": 0,
+    "06": 0,
+    "07": 0,
+    "08": 0,
+    "09": 0,
+    10: 0,
+    11: 0,
+    12: 0,
+};
+
 function App() {
     const [showForm, setShowForm] = useState(false);
-    const [showFilter, setShowFilter] = useState(false);
+    // const [showFilter, setShowFilter] = useState(false);
 
     const [newItem, setNewItem] = useState(initialValue);
-    const { name, amount, date } = newItem;
+    const { id, name, amount, date } = newItem;
     const [data, setData] = useState([]);
     const [years, setYears] = useState([]);
     const [displayData, setDisplayData] = useState([]);
+    const [expenseByYear, setExpenseByYear] = useState({});
+    const [chartYear, setChartYear] = useState(null);
 
     const handleAdd = (e) => {
         e.preventDefault();
@@ -27,26 +46,47 @@ function App() {
             alert("Please fill all the fields!");
             return;
         }
-        setData([...data, newItem]);
-        setDisplayData([...data], newItem);
+        const new_id = uuidv4();
+        setData([...data, { ...newItem, id: new_id }]);
         const year = Number(newItem.date.slice(0, 4));
         if (!years.includes(year)) {
             setYears([...years, year]);
         }
+        if (!expenseByYear.hasOwnProperty(year)) {
+            const month = newItem.date.slice(5, 7);
+            const added_year = { [year]: { ...MONTHS } };
+            added_year[year][month] = Number(newItem.amount);
+            setExpenseByYear({ ...expenseByYear, ...added_year });
+        } else {
+            const month = newItem.date.slice(5, 7);
+            const tmp = { ...expenseByYear };
+            tmp[year][month] += Number(newItem.amount);
+            setExpenseByYear({ ...tmp });
+        }
         setNewItem(initialValue);
     };
 
-    const handleSelectChange = (e) => {
-        if (e.target.value === "-1") {
-            console.log("abc");
-            setDisplayData(data);
-        } else
+    useEffect(() => {
+        if (data.length > 0) {
+            const selected_year = document.getElementById("select-year");
+            setChartYear(selected_year.value);
             setDisplayData(
-                data.filter((d) => d.date.slice(0, 4) === e.target.value)
+                data.filter((d) => d.date.slice(0, 4) === selected_year.value)
             );
+        }
+        // console.log("data", data);
+        console.log("expense", expenseByYear);
+        console.log("chartyear", chartYear);
+    }, [data]);
+    // console.log(expenseByYear);
+
+    const handleSelectChange = (e) => {
+        setDisplayData(
+            data.filter((d) => d.date.slice(0, 4) === e.target.value)
+        );
     };
 
-    console.log(showFilter);
+    // console.log(showFilter);
     return (
         <>
             <span className="icon">
@@ -115,41 +155,26 @@ function App() {
                 </div>
                 {data.length > 0 && (
                     <div className="list-expense">
-                        {showFilter ? (
-                            <div className="filter">
-                                <span>Filter by year</span>
-                                <select onChange={handleSelectChange}>
-                                    <option value="-1">Show all</option>
-                                    {[...years]
-                                        .sort()
-                                        .reverse()
-                                        .map((d, index) => (
-                                            <option key={d} value={d}>
-                                                {d}
-                                            </option>
-                                        ))}
-                                </select>
-                                <Button
-                                    colorButton={"gray"}
-                                    onClickButton={() => setShowFilter(false)}
-                                    text="Hide Filter"
-                                />
-                            </div>
-                        ) : (
-                            <Button
-                                colorButton={"violet"}
-                                onClickButton={() => setShowFilter(true)}
-                                text="Show Filter"
-                            />
-                        )}
-
-                        {showFilter
-                            ? displayData.map((item, index) => (
-                                  <Expense key={index} item={item} />
-                              ))
-                            : data.map((item, index) => (
-                                  <Expense key={index} item={item} />
-                              ))}
+                        <div className="filter">
+                            <span>Filter by year</span>
+                            <select
+                                id="select-year"
+                                onChange={handleSelectChange}
+                            >
+                                {/* <option value="-1">Show all</option> */}
+                                {[...years]
+                                    .sort()
+                                    .reverse()
+                                    .map((d, index) => (
+                                        <option key={d} value={d}>
+                                            {d}
+                                        </option>
+                                    ))}
+                            </select>
+                        </div>
+                        {displayData.map((item) => (
+                            <Expense key={item.id} item={item} />
+                        ))}
                     </div>
                 )}
             </main>
