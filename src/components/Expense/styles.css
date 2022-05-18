@@ -49,3 +49,7 @@
     flex: 2;
     justify-content: left;
 }
+
+.delete{
+    cursor: pointer;
+}

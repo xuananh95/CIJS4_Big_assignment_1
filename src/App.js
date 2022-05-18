@@ -86,6 +86,10 @@ function App() {
         );
     };
 
+    const handleDelete = (id) => {
+        setData(data.filter((d) => d.id !== id));
+    };
+
     // console.log(showFilter);
     return (
         <>
@@ -173,7 +177,13 @@ function App() {
                             </select>
                         </div>
                         {displayData.map((item) => (
-                            <Expense key={item.id} item={item} />
+                            <Expense
+                                key={item.id}
+                                item={item}
+                                handleDelete={() => {
+                                    handleDelete(item.id);
+                                }}
+                            />
                         ))}
                     </div>
                 )}

@@ -8,3 +8,4 @@ Functionalities:
 -   [x] Displaying expenses list
 -   [ ] Graph showing expense
 -   [x] Filter based on year
+-   [x] Delete button

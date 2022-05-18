@@ -1,7 +1,8 @@
 import React from 'react';
 import './styles.css';
+import { AiFillDelete } from 'react-icons/ai'
 
-const Expense = ({ item }) => {
+const Expense = ({ item, handleDelete }) => {
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
@@ -17,6 +18,11 @@ const Expense = ({ item }) => {
                 <span className="name-container flex-box">{item.name}</span>
                 <div className="amount-container flex-box">
                     <span className="amount border">${item.amount}</span>
+                </div>
+                <div className="flex-box">
+                    <div className="delete" onClick={handleDelete}>
+                        <AiFillDelete fontSize={'30px'} marginTop={'30%'} />
+                    </div>
                 </div>
             </>
         </div >
